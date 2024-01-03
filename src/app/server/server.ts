@@ -6,27 +6,26 @@ import { ExpressConfig } from "./config/express-config";
 import { MongoConfig } from "./config/mongo-config";
 import { RouteConfig } from "./config/route-config";
 
-import  compression from "compression";  // compresses requests
+import compression from "compression";  // compresses requests
 import * as bodyParser from "body-parser";
-import  logger from "morgan";
+import logger from "morgan";
 // import * as errorHandler from "errorhandler";
-// import * as lusca from "lusca";
+import lusca from "lusca";
 import * as dotenv from "dotenv";
-// import * as flash from "express-flash";
+import flash from "express-flash";
 // import * as path from "path";
 const expressValidator = require("express-validator");
-// import * as passport from "passport";
+import passport from "passport";
 // import * as passportConfig from "./config/passport-config";
 
 
 class Server extends RouteConfig {
 
 
-  private mongoDB: MongoConfig;
   private readonly expressConfig: ExpressConfig;
-  private readonly session:any;
-  private readonly route: RouteConfig;
-    
+  private readonly session: any;
+  // private readonly route: RouteConfig;
+
   //#region Constructor
   constructor(expressConfig: ExpressConfig) {
     super(expressConfig.getExpress());
@@ -37,7 +36,7 @@ class Server extends RouteConfig {
     let connectUri = process.env.MONGODB_URI || process.env.MONGOLAB_URI;
     // this.mongoDB = new MongoConfig(connectUri, () => {
     // }, this.session);
-    
+
     this.setExpressConfig();
   }
   //#endregion
@@ -60,10 +59,6 @@ class Server extends RouteConfig {
       resave: true,
       saveUninitialized: true,
       secret: process.env.SESSION_SECRET,
-      store: this.mongoDB.getMongoStore({
-        url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
-        autoReconnect: true
-      })
     }));
     this.expressConfig.add(passport.initialize());
     this.expressConfig.add(passport.session());
@@ -74,7 +69,6 @@ class Server extends RouteConfig {
       res.locals.user = req.user;
       next();
     });
-    this.expressConfig.add(errorHandler());
   }
   //#endregion
 
@@ -87,8 +81,8 @@ class Server extends RouteConfig {
       });
     }
   }
-  
- //#endregion  
+
+  //#endregion  
 
 }
 
@@ -96,13 +90,15 @@ class Server extends RouteConfig {
 /**
  * Controllers (route handlers).
  */
-import {login} from "./login/LoginController";
 
 
-var server = new Server((new ExpressConfig(process.env.EXPRESS_PORT)));
-server.httpPost("/api/signup", login.postSignup);
-server.httpPost("/api/login", login.postLogin);
-server.start();
+// import { login } from "./login/LoginController";
+
+
+// var server = new Server((new ExpressConfig(process.env.EXPRESS_PORT)));
+// server.httpPost("/api/signup", login.postSignup);
+// server.httpPost("/api/login", login.postLogin);
+// server.start();
 /**
  * Error Handler. Provides full stack - remove for production
  */
