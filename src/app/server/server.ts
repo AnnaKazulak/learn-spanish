@@ -16,6 +16,7 @@ import flash from "express-flash";
 // import * as path from "path";
 const expressValidator = require("express-validator");
 import passport from "passport";
+import { Test } from "./controller/test";
 // import * as passportConfig from "./config/passport-config";
 
 
@@ -92,13 +93,14 @@ class Server extends RouteConfig {
  */
 
 
+
 // import { login } from "./login/LoginController";
 
 
-// var server = new Server((new ExpressConfig(process.env.EXPRESS_PORT)));
-// server.httpPost("/api/signup", login.postSignup);
+const server = new Server((new ExpressConfig(process.env.EXPRESS_PORT || 3000)));
+server.httpGet("/api/test", Test.getName);
 // server.httpPost("/api/login", login.postLogin);
-// server.start();
+server.start();
 /**
  * Error Handler. Provides full stack - remove for production
  */

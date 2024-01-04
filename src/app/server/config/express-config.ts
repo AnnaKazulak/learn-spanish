@@ -8,7 +8,7 @@ class ExpressConfig extends PassportConfig {
     /**
      *
      */
-    constructor(port: number) {
+    constructor(port: number | string) {
         super();
         this.app = express();
         this.app.set("port", port || 3000);
